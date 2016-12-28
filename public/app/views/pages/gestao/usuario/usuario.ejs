@@ -1,0 +1,95 @@
+<md-dialog md-theme="modalTheme" style="width: 50%;height:auto;max-width: 90%;max-height:100%;">
+    <div layout="column">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3><span>{{actionLabel}}</span></h3>
+                <span flex></span>
+                <md-button ng-click="closeDialog()">Fechar</md-button>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <form name="usuarioForm" ng-submit="save()" novalidate>
+                
+                <div layout="row">
+                    <md-input-container md-no-float flex="60" class="md-block">
+                        <h3>Nome *</h3>
+                        <input type="text" name="nome" ng-model="usuario.nome" md-maxlength="100" required aria-label="Nome" ng-readonly="readonly">
+                        <div ng-messages="usuarioForm.nome.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="md-maxlength" class="my-message">Tamanho máximo 50 caracteres</div>
+                        </div>
+                    </md-input-container>
+                    <span flex="5"></span>
+                    <md-input-container flex class="md-block">
+                        <h3>CPF *</h3>
+                        <input type="text" name="cpf" mask="999.999.999-99" clean="false" ng-blur="validarCPF(cpf)" ng-model="usuario.cpf" required aria-label="CPF" ng-pattern="/^[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}$/" 
+                        ng-readonly="readonly">
+                        <div ng-messages="usuarioForm.cpf.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">###.###.###-## - Insira um CPF válido</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    
+                    <md-input-container md-no-float flex="50" class="md-block">
+                        <h3>Email *</h3>
+                        <input type="email" name="email" ng-model="usuario.email" required aria-label="Email" 
+                            ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i" 
+                            ng-readonly="readonly">
+                        <div ng-messages="usuarioForm.email.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern" class="my-message">Digite um email válido</div>
+                        </div>
+                    </md-input-container>
+                    
+                    <span flex="15"></span>
+
+                    <div ng-if="action == 'create'">
+                        <md-input-container md-no-float flex class="md-block">
+                            <h3>Senha *</h3>
+                            <input type="password" name="senha" ng-model="usuario.senha" md-maxlength="20" required aria-label="senha">
+                            <div ng-messages="usuarioForm.senha.$error" role="alert" multiple>
+                                <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                                <div ng-message="md-maxlength" class="my-message">Tamanho máximo 20 caracteres</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                </div>
+
+                <h3>Data de Nascimento *</h3>
+                <md-input-content flex class="md-block">
+                    <md-datepicker ng-model="usuario.dataNascimento" ng-disabled="readonly"></md-datepicker>
+                </md-input-content>
+                
+                <hr>                
+                
+                <h3>Perfis de Acesso *</h3>
+                <md-input-container md-no-float flex="50" class="md-block">
+                    <md-select name="perfis" ng-model="usuario.perfis" aria-label="Perfis" multiple required ng-disabled="readonly">
+                        <md-option ng-repeat="p in perfilList" value="{{p}}">
+                            {{p}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="usuarioForm.perfis.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                    </div>
+                </md-input-container>
+
+
+                <div layout="column" ng-if="loading" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+                <div layout="row" layout-align="center center" style="padding-top:20px">
+                    <md-button ng-if="action === 'create'" type="submit" ng-disabled="usuarioForm.$invalid || loading" class="md-raised md-primary"> Criar Usuário</md-button>
+                    <md-button ng-if="action === 'edit'" type="submit" ng-disabled="usuarioForm.$invalid || loading" class="md-raised md-primary"> Atualizar Usuário</md-button>
+                    <div flex></div>
+                </div>
+
+            </form>
+        </md-content>    
+    </div>
+</md-dialog>

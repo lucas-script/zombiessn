@@ -1,0 +1,37 @@
+<div layout-align="center center" layout="column" layout-fill>
+    <div class="cadastroBox md-whiteframe-z1" layout="column">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3><span>Search your user ID</span></h3>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <table datatable="ng" class="row-border hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Birthday</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="u in users">
+                        <td>{{u._id}}</td>
+                        <td>{{u.name}}</td>
+                        <td>{{u.gender}}</td>
+                        <td>{{u.birthday}}</td>
+                        <td>
+                            <md-button class="md-raised md-warn" ui-sref="home.login({id: u._id})">It's me</md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>          
+        </md-content>
+    </div>
+    <div layout="row" layout-align="center center" style="padding-top:20px">
+        <md-button ui-sref="home.login" ui-sref-opts="{reload:true}">Login</md-button>
+        <md-button ui-sref="home.register" ui-sref-opts="{reload:true}">REGISTER</md-button>
+    </div>
+</div>

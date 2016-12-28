@@ -1,0 +1,33 @@
+<div layout="column" layout-align="center center"  layout-fill>
+    <div class="loginBox md-whiteframe-z1" layout="column">
+        <md-toolbar>
+            <h2 class="md-toolbar-tools">
+                <span>Welcome to Zombie Survivor Social Network</span>
+            </h2>
+        </md-toolbar>
+        <md-content class="md-padding" layout="column">
+            <form name="loginForm" ng-submit="logon()" novalidate>
+                
+                <h4>Your ID</h4>
+                <md-input-container md-no-float class="md-block">
+                    <input type="text" name="id" ng-model="id" aria-label="ID" required>
+                    <div ng-messages="loginForm.id.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Required</div>
+                    </div>
+                </md-input-container>
+                
+                <div layout="column" ng-if="loading" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+
+                <div layout="row" layout-align="center center" style="padding-top:20px">
+                    <md-button type="submit" ng-disabled="loginForm.$invalid || loading" class="md-raised md-primary"> Login</md-button>
+                    <md-button ui-sref="home.forgot" ui-sref-opts="{reload:true}">Forgot your id?</md-button>
+                    <div flex></div>
+                    <md-button ui-sref="home.register" ui-sref-opts="{reload:true}">REGISTER NOW</md-button>
+                </div>
+
+            </form>
+        </md-content>
+    </div>
+</div>

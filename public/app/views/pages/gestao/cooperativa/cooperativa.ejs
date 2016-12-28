@@ -1,0 +1,143 @@
+<md-dialog md-theme="modalTheme" style="width: 50%;height:auto;max-width: 90%;max-height:100%;">
+    <div layout="column">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3><span>{{actionLabel}}</span></h3>
+                <span flex></span>
+                <md-button ng-click="closeDialog()">Fechar</md-button>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <form name="cooperativaForm" ng-submit="save()" novalidate>
+                
+                <h3>Nome Fantasia *</h3>
+                <md-input-container md-no-float flex class="md-block">
+                    <input type="text" name="nomeFantasia" ng-model="cooperativa.nomeFantasia" md-maxlength="100" required aria-label="Nome Fantasia" ng-readonly="readonly">
+                    <div ng-messages="cooperativaForm.nomeFantasia.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                        <div ng-message="md-maxlength" class="my-message">Tamanho máximo 100 caracteres</div>
+                    </div>
+                </md-input-container>
+
+                <h3>Razão Social *</h3>
+                <md-input-container md-no-float flex class="md-block">
+                    <input type="text" name="razaoSocial" ng-model="cooperativa.razaoSocial" md-maxlength="100" required aria-label="Razão Social" ng-readonly="readonly">
+                    <div ng-messages="cooperativaForm.razaoSocial.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                        <div ng-message="md-maxlength" class="my-message">Tamanho máximo 100 caracteres</div>
+                    </div>
+                </md-input-container>
+                
+                
+                <div layout="row">
+                    <md-input-container flex="40" class="md-block">
+                        <h3>CNPJ *</h3>
+                        <input type="text" name="cnpj" mask="99.999.999/9999-99" clean="false" ng-blur="validarCNPJ()" ng-model="cooperativa.cnpj" required aria-label="CNPJ" ng-readonly="readonly">
+                        <div ng-messages="cooperativaForm.cnpj.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">##.###.###/####-## - Insira um CNPJ válido</div>
+                        </div>
+                    </md-input-container>
+                    
+                    <span flex="10"></span>
+                    <md-input-container flex="40" class="md-block">
+                        <h3>Inscrição Municipal *</h3>
+                        <input type="text" name="inscricaoMunicipal" mask="9999999" clean="false" ng-model="cooperativa.inscricaoMunicipal" required aria-label="Inscrição Municipal" ng-readonly="readonly">
+                        <div ng-messages="cooperativaForm.inscricaoMunicipal.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">####### - Insira uma Inscrição Municipal válido</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    <md-input-content flex="40" class="md-block">
+                        <h3>Data de Abertura *</h3>
+                        <md-datepicker ng-model="cooperativa.dataAbertura" required ng-disabled="readonly"></md-datepicker>
+                    </md-input-content>
+                    
+                    <span flex="10"></span>
+                    <md-input-container flex="40" class="md-block">
+                        <h3>Inscrição Estadual *</h3>
+                        <input type="text" name="inscricaoEstadual" mask="99.999.999-9" clean="false" ng-model="cooperativa.inscricaoEstadual" required aria-label="Inscrição Estadual" ng-readonly="readonly">
+                        <div ng-messages="cooperativaForm.inscricaoEstadual.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">####### - Insira uma Inscrição Estadual válido</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <div layout="row">
+                    <md-input-container flex="40" class="md-block">
+                        <h3>CNAE Principal *</h3>
+                        <input type="text" name="cnaePrincipal" mask="9999-9/99" clean="false" ng-model="cooperativa.cnaePrincipal" required aria-label="CNAE Principal" ng-readonly="readonly">
+                        <div ng-messages="cooperativaForm.cnaePrincipal.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">####-#/## - Insira uma CNAE Principal válido</div>
+                        </div>
+                    </md-input-container>
+
+                    <span flex="10"></span>
+                    <md-input-container flex="40" class="md-block">
+                        <h3>CNAE Secundário *</h3>
+                        <input type="text" name="cnaeSecundaria" mask="9999-9/99" clean="false" ng-model="cooperativa.cnaeSecundaria" required aria-label="CNAE Secundária" ng-readonly="readonly">
+                        <div ng-messages="cooperativaForm.cnaeSecundaria.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                            <div ng-message="pattern">####-#/## - Insira uma CNAE Secundário válido</div>
+                        </div>
+                    </md-input-container>
+                </div>
+
+                <h3>Natureza Jurídica *</h3>
+                <md-input-container md-no-float flex="100" class="md-block">
+                    <md-select name="naturezaJuridica" aria-label="Naturezas Jurídicas"
+                        ng-model="cooperativa.naturezaJuridica"
+                        data-md-container-class="selectdemoSelectHeader" required ng-disabled="readonly">
+                        
+                        <md-select-header class="demo-select-header">
+                            <input ng-model="njSearchTerm" aria-label="Filtro" ng-keydown="onSearchChange($event)" type="search" class="demo-header-searchbox _md-text">
+                        </md-select-header>
+                        <md-optgroup>
+                            <md-option ng-value="nj._id" ng-repeat="nj in njList | filter:njSearchTerm track by nj._id">{{nj.codigo}} | {{nj.naturezaJuridica}}</md-option>
+                        </md-optgroup>
+
+                    </md-select>
+                    <div ng-messages="cooperativaForm.naturezaJuridica.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                    </div>
+                </md-input-container>
+
+                <h3>Endereço *</h3>
+                <md-input-container md-no-float flex class="md-block">
+                    <input type="text" name="endereco" ng-model="cooperativa.endereco" md-maxlength="100" required aria-label="Endereço" ng-readonly="readonly">
+                    <div ng-messages="cooperativaForm.endereco.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                        <div ng-message="md-maxlength" class="my-message">Tamanho máximo 100 caracteres</div>
+                    </div>
+                </md-input-container>
+
+                <h3>Email </h3>
+                <md-input-container md-no-float flex="45" class="md-block">
+                    <input type="email" name="email" ng-model="cooperativa.email" required aria-label="Email" 
+                        ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i" 
+                        ng-readonly="readonly">
+                    <div ng-messages="cooperativaForm.email.$error" role="alert" multiple>
+                        <div ng-message="required" class="my-message">Campo Obrigatório</div>
+                        <div ng-message="pattern" class="my-message">Digite um email válido</div>
+                    </div>
+                </md-input-container>
+                
+                <div layout="column" ng-if="loading" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+                <div layout="row" layout-align="center center" style="padding-top:20px">
+                    <md-button ng-if="action === 'create'" type="submit" ng-disabled="cooperativaForm.$invalid || loading" class="md-raised md-primary"> Criar Cooperativa</md-button>
+                    <md-button ng-if="action === 'edit'" type="submit" ng-disabled="cooperativaForm.$invalid || loading" class="md-raised md-primary"> Atualizar Cooperativa</md-button>
+                    <div flex></div>
+                </div>
+
+            </form>
+        </md-content>    
+    </div>
+</md-dialog>

@@ -1,0 +1,48 @@
+<md-dialog style="width: 25%;height:auto;max-width: 90%;max-height:100%;">
+    <div layout="column">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h3><span>Add new item</span></h3>
+                <span flex></span>
+                <md-button ng-click="closeDialog()">Close</md-button>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <form name="itemForm" ng-submit="answer()" novalidate>
+                
+                <div layout="column">
+                    <div layout="row">
+                            
+                        <md-input-container md-no-float flex="70" class="md-block">
+                            <h4>Item *</h4>
+                            <md-select ng-model="itemToAdd.item" aria-label="Item" required>
+                                <md-option ng-repeat="i in itemsList" ng-value="i._id">
+                                    {{ i.name }}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        
+                        <md-input-container md-no-float flex="30" class="md-block">
+                            <h4>Amount *</h4>
+                            <input type="number" name="amount" ng-model="itemToAdd.amount" aria-label="Amount" required ng-readonly="readonly">
+                            <div ng-messages="itemForm.amount.$error" role="alert" multiple>
+                                <div ng-message="required" class="my-message">Required</div>
+                            </div>
+                        </md-input-container>
+                      
+                    </div>
+                </div>
+
+                <div layout="column" ng-if="loading" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+                <div layout="row" layout-align="center center" style="padding-top:20px">
+                    <md-button type="submit" ng-disabled="itemForm.$invalid || loading" class="md-raised md-primary"> Add</md-button>
+                    <div flex></div>
+                </div>
+
+            </form>
+        </md-content>    
+    </div>
+</md-dialog>

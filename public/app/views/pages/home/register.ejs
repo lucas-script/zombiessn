@@ -1,0 +1,86 @@
+<div layout="column" layout-align="center center" layout-fill>
+    <div class="cadastroBox md-whiteframe-z1" layout="column">
+        <md-toolbar>
+            <h2 class="md-toolbar-tools">
+                <span>Register</span>
+            </h2>
+        </md-toolbar>
+        <md-content class="md-padding" layout="column" layout-padding>
+            <form name="registerForm" ng-submit="register()" novalidate>
+                
+                <div layout="row">
+                    <md-input-container md-no-float flex="50" class="md-block">
+                        <h3>Name *</h3>
+                        <input type="text" name="name" ng-model="user.name" md-maxlength="100" required aria-label="Name" ng-readonly="readonly">
+                        <div ng-messages="registerForm.name.$error" role="alert" multiple>
+                            <div ng-message="required" class="my-message">Required</div>
+                            <div ng-message="md-maxlength" class="my-message">50 characters</div>
+                        </div>
+                    </md-input-container>
+
+                    <span flex="5"></span>
+                    <md-input-container md-no-float flex="20" class="md-block">
+                        <h3>Gender *</h3>
+                        <md-select ng-model="user.gender" aria-label="Gender" required>
+                            <md-option ng-repeat="g in genders" ng-value="g">
+                                {{g}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <span flex="5"></span>
+                    <md-input-container flex class="md-block">
+                        <h3>Birthday *</h3>
+                        <md-datepicker ng-model="user.birthday" ng-disabled="readonly" aria-label="Birthday"></md-datepicker>
+                    </md-input-container>
+                </div>
+
+                <md-divider></md-divider>                
+
+                <div layout="row">
+
+                    <div flex="50">
+                        <h3>Your Location</h3>
+                        <h4>[{{user.lastLocation.lat}}, {{user.lastLocation.lng}}]</h4>
+                        <div map-lazy-load="https://maps.google.com/maps/api/js?key=AIzaSyBnkBVhKo6Gsuot71EjpxhTN0KCbZBCCog" map-lazy-load-params="{{googleMapsUrl}}">
+                            <ng-map style="height: 400px;" default-style="false" center="current-position" zoom="16" 
+                                geo-callback="finalLocation()" aria-label="Map">
+                                <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
+                                </ng-map>
+                        </div>
+                    </div>
+                    
+                    <div flex="50">
+                        <div layout="row" layout-align="center center">
+                            <h3>My Inventory</h3>
+                            <span flex="5"></span>
+                            <md-button class="md-raised md-primary" ng-click="addNewItem()">Add item to inventory</md-button>
+                        </div>
+                        
+                        <md-content layout="row" layout-align="center center">
+                            <md-list flex="25">
+                                <md-list-item class="md-3-line" ng-repeat="i in user.inventory" ng-click="null">
+                                    <div class="md-list-item-text">
+                                        <h3> {{ getItemNameById(i.item) }} </h3>
+                                        <p> {{ i.amount }} </p>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+
+                    </div>
+
+                </div>
+                <div layout="column" ng-if="loading" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+                
+                <div layout="row" layout-align="center center" style="padding-top:20px">
+                    <md-button type="submit" ng-disabled="registerForm.$invalid" class="md-raised md-primary"> Register</md-button>
+                    <div flex></div>
+                    <md-button ui-sref="home.login" ui-sref-opts="{reload:true}">Already registered?</md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</div>
