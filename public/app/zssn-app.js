@@ -49,7 +49,7 @@ zssnApp.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$
     })
 
     .state('account', {
-        url: '/account',
+        url: '/account/:id',
         templateUrl : 'app/views/accountView.ejs',
         controller: 'accountController'
     })
@@ -57,6 +57,11 @@ zssnApp.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider', '$
         url: '/home',
         templateUrl: 'app/views/pages/account/home.ejs',
         controller: 'accountHomeController'
+    })
+    .state('account.me', {
+        url: '/me',
+        templateUrl: 'app/views/pages/account/me.ejs',
+        controller: 'meController'
     });
 }]);
 
@@ -98,7 +103,7 @@ zssnApp.service('itemService', ['$http', function ($http) {
     }
 }]);
 
-zssnApp.service('userService', ['$http', function($http) {
+zssnApp.service('userService', ['$http', function ($http) {
 
     this.list = function () {
         return $http.get('/api/users');
@@ -115,6 +120,16 @@ zssnApp.service('userService', ['$http', function($http) {
     this.delete = function (id) {
         return $http.delete('/api/users/' + id);
     };
+}]);
+
+zssnApp.service('sessionService', ['$http', function ($http) {
+    
+    this.token;
+    this.userInfo;
+    this.logout = function () {
+        this.userInfo = {};
+        this.token = '';
+    }
 }]);
 
 //
@@ -163,7 +178,7 @@ zssnApp.controller('registerController',
     }
 
     // map
-    NgMap.getMap().then( function (map) {
+    NgMap.getMap({ id: 'register-map' }).then( function (map) {
         $scope.map = map;
         $scope.user.lastLocation.lat = map.getCenter().lat();
         $scope.user.lastLocation.lng = map.getCenter().lng();
@@ -283,9 +298,45 @@ zssnApp.controller('forgotController',
 }]);
 
 zssnApp.controller('accountController', 
-    ['$scope', 'userService', 'messageService', 'utilService', '$mdDialog', 
-    function ($scope, userService, messageService, utilService, $mdDialog) {
+    ['$scope', '$state', '$stateParams', 'messageService', 'utilService', 'userService', 'sessionService', 
+    function ($scope, $state, $stateParams, messageService, utilService, userService, sessionService) {
     
+    var id = $stateParams.id;
+    
+    // load user info
+    userService.get(id).then( function (res) {
+        sessionService.userInfo = res.data.user;
+        sessionService.userInfo.birthday = utilService.convertToDate(sessionService.userInfo.birthday);
+    });
+
+
+    $scope.getUserInfo = function () {
+        return sessionService.userInfo;
+    }
+}]);
+
+zssnApp.controller('meController', 
+    ['$scope', '$state', 'utilService', 'messageService', 'userService', 'itemService', 'NgMap', '$mdDialog', 'sessionService', 
+    function ($scope, $state, utilService, messageService, userService, itemService, NgMap, $mdDialog, sessionService) {
+    
+    $scope.readonly = true;
+    $scope.user = sessionService.userInfo;
+    $scope.map;
+    $scope.userNewLocation = {};
+    $scope.genders = ['Male', 'Female'];
+    $scope.itemsList = [];
+    $scope.googleMapsUrl = utilService.googleMapsUrl;
+
+    // map
+    NgMap.getMap({id:'me-map'}).then( function (m) {
+        $scope.map = m;
+        $scope.userNewLocation.lat = m.getCenter().lat();
+        $scope.userNewLocation.lng = m.getCenter().lng();
+    });
+    
+    $scope.updateLocation = function () {
+        
+    }
 }]);
 
 zssnApp.controller('accountActionsController', 
@@ -295,5 +346,4 @@ zssnApp.controller('accountActionsController',
 }]);
 
 zssnApp.controller('accountHomeController', ['$scope', function ($scope) {
-
 }]);

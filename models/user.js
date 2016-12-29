@@ -10,7 +10,7 @@ var UserSchema = new Schema({
         lat: Number
     },
     inventory: [{
-        product: { type: Schema.Types.ObjectId, ref: 'Product' },
+        item: { type: Schema.Types.ObjectId, ref: 'Item' },
         amount: { type: Number }
     }],
     infected: { type: Boolean, default: false },

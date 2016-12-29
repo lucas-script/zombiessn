@@ -1,0 +1,78 @@
+<md-toolbar class="md-hue-3">
+    <h2 class="md-toolbar-tools">
+        <span>Your Profile</span>
+    </h2>
+</md-toolbar>
+<md-content class="md-padding" layout="column" layout-padding>
+    <form name="registerForm" ng-submit="" novalidate>
+        
+        <div layout="row">
+            <md-input-container md-no-float flex="50" class="md-block">
+                <h3>Name *</h3>
+                <input type="text" name="name" ng-model="user.name" md-maxlength="100" required aria-label="Name" ng-readonly="readonly">
+                <div ng-messages="registerForm.name.$error" role="alert" multiple>
+                    <div ng-message="required" class="my-message">Required</div>
+                    <div ng-message="md-maxlength" class="my-message">50 characters</div>
+                </div>
+            </md-input-container>
+
+            <span flex="5"></span>
+            <md-input-container md-no-float flex="20" class="md-block">
+                <h3>Gender *</h3>
+                <md-select ng-model="user.gender" aria-label="Gender" required ng-disabled="readonly">
+                    <md-option ng-repeat="g in genders" ng-value="g">
+                        {{g}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <span flex="5"></span>
+            <md-input-container flex class="md-block">
+                <h3>Birthday *</h3>
+                <md-datepicker ng-model="user.birthday" ng-disabled="readonly" aria-label="Birthday"></md-datepicker>
+            </md-input-container>
+        </div>
+
+        <md-divider></md-divider>                
+
+        <div layout="row">
+
+            <div flex="50">
+                <h4>Your Last Location [{{user.lastLocation.lat}}, {{user.lastLocation.lng}}]</h4>
+                <h4></h4>
+                <h3>Your Current Location</h3>
+                <h4>[{{userNewLocation.lat}}, {{userNewLocation.lng}}]</h4>
+                <md-button type="submit" class="md-raised md-primary md-hue-2"> UPDATE MY LOCATION</md-button>
+                <!--  map-lazy-load="https://maps.google.com/maps/api/js?key=AIzaSyBnkBVhKo6Gsuot71EjpxhTN0KCbZBCCog" map-lazy-load-params="{{googleMapsUrl}} -->
+                <div>
+                    <ng-map id="me-map" style="height: 100%;width: 100%;" default-style="false" center="current-position" zoom="16" aria-label="Map">
+                        <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
+                    </ng-map>
+                </div>
+            </div>
+            
+            <div flex="50">
+                <div layout="row" layout-align="center center">
+                    <h3>My Inventory</h3>
+                </div>
+                
+                <md-content layout="row" layout-align="center center">
+                    <md-list flex="25">
+                        <md-list-item class="md-3-line" ng-repeat="i in user.inventory" ng-click="null">
+                            <div class="md-list-item-text">
+                                <h3> {{ i.item.name }} </h3>
+                                <p> {{ i.amount }} </p>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+
+            </div>
+
+        </div>
+        <div layout="column" ng-if="loading" layout-align="center center">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+    </form>
+</md-content>

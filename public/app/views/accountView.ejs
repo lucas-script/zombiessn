@@ -1,6 +1,7 @@
 <md-toolbar layout="row" >
     <h3> Zombie Survival Social Network</h3>
     <span flex></span>
+    <md-button>{{getUserInfo().name}}</md-button>
     <md-button ng-controller="menuController" ng-click="logout()"> Logout</md-button>
 </md-toolbar>
 
@@ -14,7 +15,7 @@
         <div layout="column" layout-fill ng-controller="accountController">
             <md-button ng-class="{ 'md-raised md-primary': isActive('/account/home') }" ui-sref="account.home">Home</md-button>
             <md-divider></md-divider>
-            <md-button ng-class="{ 'md-raised md-primary': isActive('/atividades') }" ui-sref="account">Me</md-button>
+            <md-button ng-class="{ 'md-raised md-primary': isActive('/atividades') }" ui-sref="account.me">Me</md-button>
             <md-button ng-class="{ 'md-raised md-primary': isActive('/atividades') }" ui-sref="account">Non-Infected Survivors</md-button>
             <md-button ng-class="{ 'md-raised md-primary': isActive('/atividades') }" ui-sref="account">Infected Survivors</md-button>
             <md-button ng-class="{ 'md-raised md-primary': isActive('/atividades') }" ui-sref="account">Reports</md-button>

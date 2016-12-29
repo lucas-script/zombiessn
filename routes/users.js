@@ -24,9 +24,10 @@ router.get('/users/:id', function (req, res, next) {
     var id = req.params.id; 
     var finder = User.findById(id);
     finder.select('_id name birthday gender lastLocation inventory infected');
+    finder.populate('inventory.item', 'name');
 
     finder.exec().then( function (user) {
-
+        
         return res.json({ error: null, user: user });
     }).catch( function (err) {
 
@@ -36,6 +37,26 @@ router.get('/users/:id', function (req, res, next) {
 });
 
 router.post('/users', function (req, res, next) {
+    
+    var user = new User();
+    user.name = req.body.name;
+    user.birthday = req.body.birthday;
+    user.gender = req.body.gender;
+    user.lastLocation = req.body.lastLocation;
+    user.inventory = req.body.inventory;
+    
+    user.save().then( function () {
+        var id = user._id;
+        // retornar id
+        return res.json({ error: null, message: 'Registration completed successfully, your ID:' + id, id: id });
+    }).catch( function (err) {
+
+        return res.json({ error: err });
+    });
+});
+
+
+router.post('/users/updatelocation', function (req, res, next) {
     
     var user = new User();
     user.name = req.body.name;

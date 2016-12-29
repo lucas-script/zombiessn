@@ -42,8 +42,9 @@
                     <div flex="50">
                         <h3>Your Location</h3>
                         <h4>[{{user.lastLocation.lat}}, {{user.lastLocation.lng}}]</h4>
-                        <div map-lazy-load="https://maps.google.com/maps/api/js?key=AIzaSyBnkBVhKo6Gsuot71EjpxhTN0KCbZBCCog" map-lazy-load-params="{{googleMapsUrl}}">
-                            <ng-map style="height: 400px;" default-style="false" center="current-position" zoom="16" 
+                        <!-- map-lazy-load="https://maps.google.com/maps/api/js?key=AIzaSyBnkBVhKo6Gsuot71EjpxhTN0KCbZBCCog" map-lazy-load-params="{{googleMapsUrl}}" -->
+                        <div>
+                            <ng-map id="register-map" style="height: 400px;" default-style="false" center="current-position" zoom="16" 
                                 geo-callback="finalLocation()" aria-label="Map">
                                 <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
                                 </ng-map>
