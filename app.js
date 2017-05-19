@@ -5,21 +5,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var User = require('./models/user');
 
 // config file
 var config = require('./config');
 
-
 var appView = require('./routes/index');
-var items = require('./routes/items');
+var register = require('./routes/register');
+var search = require('./routes/search');
 
+var infection = require('./routes/infection');
+var items = require('./routes/items');
 var users = require('./routes/users');
+var traderequests = require('./routes/traderequests');
 
 var app = express();
 
 // database connection
 mongoose.connect(config.databaseUrl);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public/app/views'));
@@ -33,9 +36,42 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// main page
 app.use('/', appView);
+
+// no login routes
+app.use('/api', register);
+app.use('/api', search);
+
+// 'login'
+app.use(function (req, res, next) {
+  
+  var id = req.query.token;
+
+  if (!id) return res.json({ error: null, message: 'Access prohibited, you must be logged'});
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.json({ error: null, message: 'Invalid ID, your id should be like 586424d1c1cbd928eb079bdb' });
+
+  var finder = User.findById(id);
+  finder.select('_id name');
+
+  finder.exec().then( function (user) {
+      
+      if (!user) return res.json({ error: null, message: 'User not found, check your id and try again' });
+      // add user info to req
+      req.user = user;
+      console.log('User logged as ' + user._id + ' - ' + user.name);
+      next();
+      
+  }).catch( function (err) {
+
+      return res.json({ error: err });
+  });
+});
+
 app.use('/api', items);
 app.use('/api', users);
+app.use('/api', infection);
+app.use('/api', traderequests);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

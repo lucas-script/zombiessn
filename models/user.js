@@ -4,12 +4,13 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
     name: { type: String, required: true },
     birthday: { type: Date, required: true },
-    gender: {type: String, required: true, enum: ['Male', 'Female'] },
+    gender: { type: String, required: true, enum: ['Male', 'Female'] },
     lastLocation: {
         lng: Number,
         lat: Number
     },
     inventory: [{
+        _id: false,
         item: { type: Schema.Types.ObjectId, ref: 'Item' },
         amount: { type: Number }
     }],

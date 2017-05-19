@@ -3,9 +3,11 @@ var router = express.Router();
 
 var mongoose = require('mongoose');
 var User = require('../models/user');
+var TradeRequest = require('../models/tradeRequest');
+var Trade = require('../models/trade');
 
 router.get('/users', function (req, res, next) {
-    console.log('come here!');
+    
     var finder = User.find({});
     finder.select('_id name birthday gender');
 
